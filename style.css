@@ -32,8 +32,22 @@ html,
     padding-left: 10%;
     padding-right: 10%;
 }
+.video_wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */ 
+    z-index:-3;
+    }
+    iframe{
+    z-index:-3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    }
+    
 
-section:nth-child(odd)
+/* section:nth-child(odd)
 {
     justify-content: flex-end;
-}
+} */
