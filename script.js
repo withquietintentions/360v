@@ -1,8 +1,17 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+
+//textures
+
+const textureLoader = new THREE.TextureLoader()
+const coverColorTexture = textureLoader.load("/textures/leafTextures/leafColor.jpg")
+const coverAOTexture = textureLoader.load("/textures/leafTextures/leafAO.jpg")
+const coverNormalTexture = textureLoader.load("/textures/leafTextures/leafNormal.jpg")
+const coverOpacityTexture = textureLoader.load("/textures/leafTextures/leafOpacity.jpg")
+const coverRoughnessTexture = textureLoader.load("/textures/leafTextures/leafRoughness.jpg")
 /**
- * Base
+ * Base 
  */
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -73,13 +82,17 @@ const plane = new THREE.Mesh(
     material
 )
 
-const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3, 0.2, 16, 32),
-    material
-)
-torus.position.x = 1.5
+const cylinder1 = new THREE.Mesh(
+    //1/4 cylinder
+    //new THREE.CylinderGeometry(.5, .5, 1,32, 1,false,0,Math.PI*0.5),
+    new THREE.CylinderGeometry(.5, .5, 1,32),
+   material
 
-scene.add(sphere, plane, torus)
+)
+cylinder1.position.x = 1.5
+
+//scene.add(sphere, plane, cylinder1)
+scene.add(plane, cylinder1)
 /**
  * Animate
  */
@@ -91,6 +104,9 @@ const tick = () =>
 
     // Update controls
     controls.update()
+    cylinder1.rotation.y = 0.1 * elapsedTime
+    cylinder1.rotation.x = 0.1 * elapsedTime
+
 
     // Render
     renderer.render(scene, camera)
