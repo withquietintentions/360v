@@ -8,35 +8,36 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 //  * Textures
 //  */
 
-const image = new Image()
-const texture = new THREE.Texture(image)
 
-image.onload =() =>
+const loadingManager = new THREE.LoadingManager()
+
+loadingManager.onStart = () =>
 {
-
-   texture.needsUpdate = true
-    
+    console.log('loadingManager: loading started')
 }
-image.src = "./textures/leafTextures/leafColor.jpg"
-// const loadingManager = new THREE.LoadingManager()
-// loadingManager.onStart = () =>
-// {
-//     console.log('loadingManager: loading started')
-// }
-// loadingManager.onLoad = () =>
-// {
-//     console.log('loadingManager: loading finished')
-// }
-// loadingManager.onProgress = () =>
-// {
-//     console.log('loadingManager: loading progressing')
-// }
-// loadingManager.onError = () =>
-// {
-//     console.log('loadingManager: loading error')
-// }
+loadingManager.onLoad = () =>
+{
+    console.log('loadingManager: loading finished')
+}
+loadingManager.onProgress = () =>
+{
+    console.log('loadingManager: loading progressing')
+}
+loadingManager.onError = () =>
+{
+    console.log('loadingManager: loading error')
+}
+const textureLoader = new THREE.TextureLoader(loadingManager)
+const colorTexture = textureLoader.load("./textures/leafTextures/leafColor.jpg")
+const colorTexture1 = textureLoader.load("./textures/bamboo/bambooBW.jpg")
+const colorTexture2 = textureLoader.load("./textures/bamboo/bambooLeaf.jpeg")
+const colorTexture3 = textureLoader.load("./textures/bamboo/greenBambooLeaves.jpeg")
+const colorTexture4 = textureLoader.load("./textures/bamboo/bambooForestMaui.jpg")
+const AOTexture = textureLoader.load("./textures/leafTextures/leafAO.jpg")
+const normalTexture = textureLoader.load("./textures/leafTextures/leafNormal.jpg")
+const opacityTexture = textureLoader.load("./textures/leafTextures/leafOpacity.jpg")
+const roughnessTexture = textureLoader.load("./textures/leafTextures/leafRoughness.jpg")
 
-// const textureLoader = new THREE.TextureLoader(loadingManager)
 
 // // const colorTexture = textureLoader.load('./textures/checkerboard-1024x1024.png')
 // // const colorTexture = textureLoader.load('./textures/checkerboard-2x2.png')
@@ -75,13 +76,10 @@ image.src = "./textures/leafTextures/leafColor.jpg"
 // const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
 // const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
 
-
-const textureLoader = new THREE.TextureLoader()
-const coverColorTexture = textureLoader.load("./textures/leafTextures/leafColor.jpg")
-const coverAOTexture = textureLoader.load("./textures/leafTextures/leafAO.jpg")
-const coverNormalTexture = textureLoader.load("./textures/leafTextures/leafNormal.jpg")
-const coverOpacityTexture = textureLoader.load("./textures/leafTextures/leafOpacity.jpg")
-const coverRoughnessTexture = textureLoader.load("./textures/leafTextures/leafRoughness.jpg")
+colorTexture2.repeat.x =2;
+colorTexture2.repeat.y =3;
+colorTexture2.wrapS = THREE.RepeatWrapping
+colorTexture2.wrapT= THREE.RepeatWrapping
 /**
  * Base 
  */
@@ -142,17 +140,19 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Objects
  */
-const material = new THREE.MeshBasicMaterial({map:texture})
+const material = new THREE.MeshBasicMaterial({map:colorTexture3})
+const material1 = new THREE.MeshBasicMaterial({map:colorTexture2})
+const material2 = new THREE.MeshBasicMaterial({map:colorTexture4})
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
-    material
+    material1
 )
 sphere.position.x = - 1.5
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1, 1),
-    material
+    new THREE.PlaneGeometry(1.5, 1),
+    material2
 )
 
 const cylinder1 = new THREE.Mesh(
@@ -179,6 +179,9 @@ const tick = () =>
     controls.update()
     cylinder1.rotation.y = 0.1 * elapsedTime
     cylinder1.rotation.x = 0.1 * elapsedTime
+
+    sphere.rotation.y = 0.15 * elapsedTime
+    sphere.rotation.x = 0.1 * elapsedTime
 
 
     // Render
